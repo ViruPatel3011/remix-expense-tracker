@@ -1,29 +1,62 @@
-import { Link, useActionData, useSubmit } from '@remix-run/react';
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
-  const submit = useSubmit();
+  const expenseData = useLoaderData();
+  const navigation = useNavigation();
 
-  function submitHandler(event) {
-    event.preventDefault();
+  const defaultValue = expenseData
+    ? {
+        title: expenseData.title,
+        amount: expenseData.amount,
+        date: expenseData.date,
+      }
+    : {
+        title: '',
+        amount: '',
+        date: '',
+      };
 
-    submit(event.target, {
-      // action: '/expenses/add',
-      method: 'post',
-    });
-  }
+  const isSubmitting = navigation.state !== 'idle';
+
+  // Submitting form programmatically (in normal form : <form></form> )
+  // const submit = useSubmit();
+
+  // function submitHandler(event) {
+  //   event.preventDefault();
+
+  //   submit(event.target, {
+  //     // action: '/expenses/add',
+  //     method: 'post',
+  //   });
+  // }
 
   return (
-    <form
+    // With regular form browser generate requests--> loaded a page
+    // With this form , remix handle and generates requests --> follow single page application
+    <Form
       method='post'
       className='form'
       id='expense-form'
-      onSubmit={submitHandler}
+      // onSubmit={submitHandler}
     >
       <p>
         <label htmlFor='title'>Expense Title</label>
-        <input type='text' id='title' name='title' required maxLength={30} />
+        <input
+          type='text'
+          id='title'
+          name='title'
+          required
+          maxLength={30}
+          defaultValue={defaultValue.title}
+        />
       </p>
 
       <div className='form-row'>
@@ -36,11 +69,23 @@ function ExpenseForm() {
             min='0'
             step='0.01'
             required
+            defaultValue={defaultValue.amount}
           />
         </p>
         <p>
           <label htmlFor='date'>Date</label>
-          <input type='date' id='date' name='date' max={today} required />
+          <input
+            type='date'
+            id='date'
+            name='date'
+            max={today}
+            required
+            defaultValue={
+              defaultValue.date
+                ? new Date(defaultValue.date).toISOString().slice(0, 10)
+                : ''
+            }
+          />
         </p>
       </div>
 
@@ -53,10 +98,12 @@ function ExpenseForm() {
       )}
 
       <div className='form-actions'>
-        <button>Save Expense</button>
+        <button disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting' : 'Save Expense'}
+        </button>
         <Link to='/expenses'>Cancel</Link>
       </div>
-    </form>
+    </Form>
   );
 }
 
