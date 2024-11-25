@@ -21,7 +21,7 @@ export async function getExpenses() {
         return await prisma.expense.findMany({ orderBy: { date: 'desc' } })
     } catch (error) {
         console.log(error);
-        throw error;
+        throw new Error('failed to get expenses');
     }
 }
 
@@ -30,7 +30,7 @@ export async function getExpense(id) {
         return await prisma.expense.findFirst({ where: { id: id } });
     } catch (error) {
         console.log(error);
-        throw error;
+        throw new Error('failed to get expense');
     }
 }
 
@@ -47,7 +47,7 @@ export async function updateExpense(id, updatedData) {
     }
     catch (error) {
         console.log(error);
-        throw error;
+        throw new Error('failed to update expense');
     }
 }
 
@@ -59,6 +59,6 @@ export async function deleteExpense(id) {
 
     } catch (error) {
         console.log(error);
-        throw error;
+        throw new Error('failed to delete expense');
     }
 }

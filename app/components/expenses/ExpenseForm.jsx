@@ -5,6 +5,7 @@ import {
   useLoaderData,
   // useMatches,
   useNavigation,
+  useParams,
   // useParams,
 } from '@remix-run/react';
 
@@ -13,26 +14,31 @@ function ExpenseForm() {
   const validationErrors = useActionData();
   const expenseData = useLoaderData();
 
-  // const params = useParams();
+  const params = useParams();
   // const matches = useMatches();
   // const expenses = matches.find(
-  //   (match) => match.id === 'routes/_app/expenses'
+  //   (match) => match.id === 'routes/_app.expenses'
   // ).data;
-  // const expenseData = expenses.find((expense) => expense.id === params.id);
+  // const expenseData = expenses?.find((expense) => expense.id === params.id);
+
+  if (params.id && !expenseData) {
+    // throw new Response();
+    return <p>Invalid expense id.</p>;
+  }
 
   const navigation = useNavigation();
 
   const defaultValue = expenseData
     ? {
-        title: expenseData.title,
-        amount: expenseData.amount,
-        date: expenseData.date,
-      }
+      title: expenseData.title,
+      amount: expenseData.amount,
+      date: expenseData.date,
+    }
     : {
-        title: '',
-        amount: '',
-        date: '',
-      };
+      title: '',
+      amount: '',
+      date: '',
+    };
 
   const isSubmitting = navigation.state !== 'idle';
 
@@ -55,7 +61,7 @@ function ExpenseForm() {
       method={expenseData ? 'patch' : 'post'}
       className='form'
       id='expense-form'
-      // onSubmit={submitHandler}
+    // onSubmit={submitHandler}
     >
       <p>
         <label htmlFor='title'>Expense Title</label>

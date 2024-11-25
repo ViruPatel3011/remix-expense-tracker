@@ -8,6 +8,7 @@ import { getExpenses } from '~/data/expenses.server';
 
 export default function ExpensesLayout() {
   const expensesList = useLoaderData();
+  const hasExpenses = expensesList && expensesList.length > 0;
 
   return (
     <>
@@ -23,7 +24,15 @@ export default function ExpensesLayout() {
             <span>Load Raw Data</span>
           </a>
         </section>
-        <ExpensesList expenses={expensesList} />
+        {hasExpenses && <ExpensesList expenses={expensesList} />}
+        {!hasExpenses && (
+          <section id="no-expenses">
+            <h1>No expenses found</h1>
+            <p>
+              Start <Link to="add">adding some</Link> today.
+            </p>
+          </section>
+        )}
       </main>
     </>
   );

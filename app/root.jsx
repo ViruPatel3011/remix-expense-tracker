@@ -1,12 +1,16 @@
 import {
+  Link,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from '@remix-run/react';
+import { isErrorResponse } from '@remix-run/react/dist/data';
 
 import sharedStyles from '~/styles/shared.css?url';
+import Error from './components/util/Error';
 
 export const meta = () => [
   {
@@ -16,19 +20,72 @@ export const meta = () => [
   },
 ];
 
-export default function App() {
+
+function Document({ title, children }) {
   return (
     <html lang='en'>
       <head>
+        <title>{title}</title>
         <Meta />
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+  );
+}
+
+
+export default function App() {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+
+  );
+}
+
+function CatchBoundary({ error }) {
+  return (
+    <Document title={error.statusText}>
+      <main>
+        <Error title={error.statusText}>
+          <p>
+            {error.data?.message ||
+              'Something went wrong. Please try again later.'}
+          </p>
+          <p>
+            Back to <Link to='/'>safety</Link>.
+          </p>
+        </Error>
+      </main>
+    </Document>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.log('error:',error)
+  // const response = isErrorResponse(error);
+  // if (response) {
+  //   return <CatchBoundary error={error} />;
+  // }
+  return (
+    <Document title='An error occurred'>
+      <main>
+        <Error title={error.statusText}>
+          <p>
+            {error.data.message || 'Something went wrong. Please try again later.'}
+          </p>
+          <p>
+            Back to <Link to='/'>safety</Link>.
+          </p>
+        </Error>
+      </main>
+    </Document>
   );
 }
 
