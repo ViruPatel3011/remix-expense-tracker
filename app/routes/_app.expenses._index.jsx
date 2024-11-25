@@ -33,5 +33,5 @@ export default function ExpensesLayout() {
 export async function loader() {
   const expenses = await getExpenses();
   return json(expenses);
-  // return expenses; //We can simply return this raw data also. In this approach remix behind the scene wrap this in response. Technically your loader must return response
+  // return expenses; //We can simply return this raw data also. n this approach remix behind the scene wrap this in response. Technically your loader must return response
 }

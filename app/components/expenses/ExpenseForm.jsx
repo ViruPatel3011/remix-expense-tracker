@@ -3,13 +3,23 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  // useMatches,
   useNavigation,
+  // useParams,
 } from '@remix-run/react';
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
   const expenseData = useLoaderData();
+
+  // const params = useParams();
+  // const matches = useMatches();
+  // const expenses = matches.find(
+  //   (match) => match.id === 'routes/_app/expenses'
+  // ).data;
+  // const expenseData = expenses.find((expense) => expense.id === params.id);
+
   const navigation = useNavigation();
 
   const defaultValue = expenseData
@@ -42,7 +52,7 @@ function ExpenseForm() {
     // With regular form browser generate requests--> loaded a page
     // With this form , remix handle and generates requests --> follow single page application
     <Form
-      method='post'
+      method={expenseData ? 'patch' : 'post'}
       className='form'
       id='expense-form'
       // onSubmit={submitHandler}
