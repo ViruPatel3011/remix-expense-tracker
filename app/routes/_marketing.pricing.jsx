@@ -42,3 +42,10 @@ export default function PricingPage() {
 export function meta() {
   return [];
 }
+
+export function headers({ actionHeaders, loaderHeaders, parentHeaders }) {
+  return {
+    // Accessing headers from parent headers 
+    'Cache-Control': parentHeaders.get('Cache-Control'), // 60 minutes
+  };
+}

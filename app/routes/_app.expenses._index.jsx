@@ -44,7 +44,21 @@ export async function loader({ request }) {
   const userId = await requireUserSession(request);
 
   const expenses = await getExpenses(userId);
-  return expenses;
-  // return json(expenses);
+  return json(expenses, {
+    headers: {
+      'Cache-Control': 'max-age=3',
+    },
+  });  // return json(expenses);
   // return expenses; //We can simply return this raw data also. n this approach remix behind the scene wrap this in response. Technically your loader must return response
+}
+
+
+export function headers({
+  actionHeaders,
+  loaderHeaders,
+  parentHeaders
+}) {
+  return {
+    'Cache-Control': loaderHeaders.get('Cache-Control') // 60 minutes
+  }
 }

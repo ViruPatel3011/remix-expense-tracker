@@ -55,3 +55,17 @@ export async function action({ request, params }) {
     return { deleteId: expenseId };
   }
 }
+
+
+// export function meta({ params, matches, data }) {
+//   console.log(data)
+//   const expense = matches
+//     .find((route) => route.id === 'routes/_app.expenses')
+//     ?.data?.find((expense) => expense.id === params.id);
+//   return [
+//     {
+//       title: expense.title,
+//       description: 'Update expense.',
+//     },
+//   ];
+// }
