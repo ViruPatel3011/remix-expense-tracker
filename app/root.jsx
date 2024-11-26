@@ -20,7 +20,6 @@ export const meta = () => [
   },
 ];
 
-
 function Document({ title, children }) {
   return (
     <html lang='en'>
@@ -38,13 +37,11 @@ function Document({ title, children }) {
   );
 }
 
-
 export default function App() {
   return (
     <Document>
       <Outlet />
     </Document>
-
   );
 }
 
@@ -68,17 +65,18 @@ function CatchBoundary({ error }) {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log('error:',error)
-  // const response = isErrorResponse(error);
-  // if (response) {
-  //   return <CatchBoundary error={error} />;
-  // }
+  console.log('error:', error);
+  const response = isErrorResponse(error); // when true, this is what used to go to `CatchBoundary`
+  if (response) {
+    return <CatchBoundary error={error} />;
+  }
   return (
     <Document title='An error occurred'>
       <main>
         <Error title={error.statusText}>
           <p>
-            {error.data.message || 'Something went wrong. Please try again later.'}
+            {error.data.message ||
+              'Something went wrong. Please try again later.'}
           </p>
           <p>
             Back to <Link to='/'>safety</Link>.

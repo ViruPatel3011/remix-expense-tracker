@@ -4,6 +4,7 @@ import ExpenseStatistics from '~/components/expenses/ExpenseStatistics';
 import Chart from '~/components/expenses/Chart';
 import { getExpenses } from '~/data/expenses.server';
 import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import Error from '~/components/util/Error';
 
 export default function ExpensesAnalysisPage() {
   const expenses = useLoaderData();
