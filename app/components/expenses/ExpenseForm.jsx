@@ -13,6 +13,7 @@ function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10); // yields something like 2023-09-10
   const validationErrors = useActionData();
   const expenseData = useLoaderData();
+  const navigation = useNavigation();
 
   const params = useParams();
   // const matches = useMatches();
@@ -26,19 +27,17 @@ function ExpenseForm() {
     return <p>Invalid expense id.</p>;
   }
 
-  const navigation = useNavigation();
-
   const defaultValue = expenseData
     ? {
-      title: expenseData.title,
-      amount: expenseData.amount,
-      date: expenseData.date,
-    }
+        title: expenseData.title,
+        amount: expenseData.amount,
+        date: expenseData.date,
+      }
     : {
-      title: '',
-      amount: '',
-      date: '',
-    };
+        title: '',
+        amount: '',
+        date: '',
+      };
 
   const isSubmitting = navigation.state !== 'idle';
 
@@ -61,7 +60,7 @@ function ExpenseForm() {
       method={expenseData ? 'patch' : 'post'}
       className='form'
       id='expense-form'
-    // onSubmit={submitHandler}
+      // onSubmit={submitHandler}
     >
       <p>
         <label htmlFor='title'>Expense Title</label>
