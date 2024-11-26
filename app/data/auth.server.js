@@ -33,7 +33,6 @@ export async function getUserFromSession(request) {
     const session = await sessionStorage.getSession(request.headers.get('Cookie')) // Cookie header contains session cookie that stored in browser
 
     const userId = session.get('userId');
-    console.log('userId', userId);
 
     if (!userId) {
         return null;
@@ -97,7 +96,6 @@ export async function login({ email, password }) {
 
 export async function destroyUserSession(request) {
     const session = await sessionStorage.getSession(request.headers.get('Cookie'));
-
     return redirect("/", {
         headers: {
             'Set-Cookie': await sessionStorage.destroySession(session),
@@ -105,4 +103,12 @@ export async function destroyUserSession(request) {
         }
     })
 
+}
+
+export async function requireUserSession(request) {
+    const userId = await getUserFromSession(request);
+    if (!userId) {
+        throw redirect('/auth?mode=login');
+    }
+    return userId;
 }

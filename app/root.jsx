@@ -65,7 +65,6 @@ function CatchBoundary({ error }) {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  console.log('error:', error);
   const response = isErrorResponse(error); // when true, this is what used to go to `CatchBoundary`
   if (response) {
     return <CatchBoundary error={error} />;

@@ -4,6 +4,7 @@ import { json, Link, Outlet, useLoaderData } from '@remix-run/react';
 import { FaPlus, FaDownload } from 'react-icons/fa';
 
 import ExpensesList from '~/components/expenses/ExpensesList';
+import { requireUserSession } from '~/data/auth.server';
 import { getExpenses } from '~/data/expenses.server';
 
 export default function ExpensesLayout() {
@@ -26,10 +27,10 @@ export default function ExpensesLayout() {
         </section>
         {hasExpenses && <ExpensesList expenses={expensesList} />}
         {!hasExpenses && (
-          <section id="no-expenses">
+          <section id='no-expenses'>
             <h1>No expenses found</h1>
             <p>
-              Start <Link to="add">adding some</Link> today.
+              Start <Link to='add'>adding some</Link> today.
             </p>
           </section>
         )}
@@ -39,8 +40,11 @@ export default function ExpensesLayout() {
 }
 
 // loader always executed on the backend
-export async function loader() {
-  const expenses = await getExpenses();
-  return json(expenses);
+export async function loader({ request }) {
+  const userId = await requireUserSession(request);
+
+  const expenses = await getExpenses(userId);
+  return expenses;
+  // return json(expenses);
   // return expenses; //We can simply return this raw data also. n this approach remix behind the scene wrap this in response. Technically your loader must return response
 }
