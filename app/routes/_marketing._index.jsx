@@ -60,3 +60,6 @@ export function headers({ actionHeaders, loaderHeaders, parentHeaders }) {
     'Cache-Control': parentHeaders.get('Cache-Control'), // 60 minutes
   };
 }
+
+// For disable javascript for this route page 
+export const handle = { disableJS: true };
